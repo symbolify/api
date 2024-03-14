@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.gaurd';
+import { AuthGuard } from '../auth/auth.gaurd';
 
 @Controller('todo')
 export class TodoController {

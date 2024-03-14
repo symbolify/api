@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -6,22 +6,16 @@ export class AuthService {
     constructor(private readonly jwtServ: JwtService) {}
     
     async validateToken(token: string) {
-        console.log('****** ', token);
-        // return this.jwtServ.verify(token, process.env.JWT_SECRET_KEY);
         try {
-            // console.log(this.jwtServ.verify(token, {
-            //     secret: `${process.env.JWT_SECRET_KEY}`
-            // }));
-            const abc =  this.jwtServ.verify(token, {
-                secret: `${process.env.JWT_SECRET_KEY}`
+            const validToken = this.jwtServ.verify(token, {
+                secret: process.env.JWT_SECRET_KEY
             });
-            console.log('&&&&&&&&&& ', abc);
+            if(validToken && validToken?.email !== '') {
+                return validToken;
+            }
         } catch(e: any) {
-            console.log("#######",e);
-            return e.message;
+            throw new UnauthorizedException();
         }
-        
-        return true;
     }
 
     generateToken(payload: any) {
