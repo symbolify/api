@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-// import { Cat } from '../cats/cat.entity';
+import { Todo } from 'src/todo/todo.entity';
 
 export const databaseProviders = [
   {
@@ -7,13 +7,13 @@ export const databaseProviders = [
     useFactory: async () => {
       const sequelize = new Sequelize({
         dialect: 'postgres',
-        host: 'localhost',
+        host: 'db',
         port: 5432,
         username: 'postgres',
         password: 'example',
-        database: 'nest',
+        database: 'template1',
       });
-      sequelize.addModels([]);
+      sequelize.addModels([Todo]);
       await sequelize.sync();
       return sequelize;
     },
