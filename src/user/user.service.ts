@@ -12,16 +12,23 @@ export class UserService {
   ) {}
 
   async validate(data: {email: string, password: string}) {
-    const output = {
-      status: 'FAILED',
-      message: ''
+    const output: {status: string, token?: string, data?: object, name?: string} = {
+      status: 'FAILED'
     };
     try {
       const result = await this.userRepository.findOne({where: {email: data.email, status: true}});
       if(result && result.salt) {
         const getHash = scryptSync(data.password, result.salt, 32).toString("hex");
         if(getHash === result.password) {
-          return this.authSrv.generateToken({email: data.email});
+          const token = this.authSrv.generateToken({email: data.email});
+          if(token) {
+            output.status = 'SUCCESS';
+            output.token = token;
+            output.data = {
+              name: result.name
+            };
+            return output;
+          }
         }
       }
     } catch(e) {

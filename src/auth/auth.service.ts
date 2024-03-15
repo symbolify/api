@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -22,8 +22,7 @@ export class AuthService {
         try {
             return this.jwtServ.sign(payload);
         } catch(e: any) {
-            console.log(e);
-            return e.message;
+            throw new InternalServerErrorException();
         }
     }
 }

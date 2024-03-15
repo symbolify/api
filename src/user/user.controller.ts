@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -18,10 +18,13 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() data: {email: string, password: string}) {
+  async login(@Body() data: {email: string, password: string}, @Res({ passthrough: true }) response: Response) {
     try {
-      return await this.userSrv.validate(data);
-      // 
+      const result = await this.userSrv.validate(data);
+      if(result?.status && result.status === 'SUCCESS') {
+        response.cookie('token', result.token);
+        return result.name;
+      }
     } catch(e) {
       throw e.message;
     }
