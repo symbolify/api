@@ -4,21 +4,24 @@ import { AuthService } from '../auth/auth.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userSrv: UserService, private authSrv: AuthService) {}
+  constructor(
+    private userSrv: UserService,
+    ) {}
 
   @Post('register')
-  register(@Body() data: any) {
+  async register(@Body() data: {email: string, password: string, name: string}) {
     try {
-      return 'register';
+      return await this.userSrv.addNew(data);
     } catch(e) {
       throw e.message;
     }
   }
 
   @Post('login')
-  login(@Body() data: any) {
+  async login(@Body() data: {email: string, password: string}) {
     try {
-      return this.authSrv.generateToken({email: data.email});
+      return await this.userSrv.validate(data);
+      // 
     } catch(e) {
       throw e.message;
     }

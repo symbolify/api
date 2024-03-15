@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@nestjs/common';
-// import { CreateCatDto } from './dto/create-cat.dto';
 import { Todo } from './todo.entity';
 
 @Injectable()
