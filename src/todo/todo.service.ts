@@ -11,7 +11,7 @@ export class TodoService {
   async findAll(): Promise<Todo[]> {
     return await this.todoRepository.findAll<Todo>({
       where: {status: true},
-      attributes: [`id`, `content`],
+      attributes: [`id`, `content`, `updatedAt`],
       order: [['updatedAt', 'DESC']]
     });
   }
