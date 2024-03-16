@@ -24,8 +24,4 @@ import { ConfigModule } from '@nestjs/config';
     }),
   ]
 })
-export class AuthModule {
-  constructor() {
-    console.log('##### ', process.env.JWT_SECRET_KEY);
-  }
-}
+export class AuthModule {}

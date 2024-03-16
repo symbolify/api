@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Response } from 'express';
 
@@ -23,10 +23,13 @@ export class UserController {
       const result = await this.userSrv.validate(data);
       if(result?.status && result.status === 'SUCCESS') {
         response.cookie('token', result.token);
-        return result.name;
+        return {
+          status: 'SUCCESS',
+          data: result.data
+        };
       }
     } catch(e) {
-      throw e.message;
+      throw new UnauthorizedException();
     }
   }
 }
