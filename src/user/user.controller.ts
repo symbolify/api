@@ -1,26 +1,39 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthService } from '../auth/auth.service';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
-  constructor(private userSrv: UserService, private authSrv: AuthService) {}
+  constructor(
+    private userSrv: UserService,
+    ) {}
 
   @Post('register')
-  register(@Body() data: any) {
+  async register(@Body() data: {email: string, password: string, name: string}) {
     try {
-      return 'register';
+      return await this.userSrv.addNew(data);
     } catch(e) {
       throw e.message;
     }
   }
 
   @Post('login')
-  login(@Body() data: any) {
+  async login(@Body() data: {email: string, password: string}, @Res({ passthrough: true }) response: Response) {
+    const output: {status: string, message?: string, data?: any} = {
+      status: 'FAILED'
+    };
     try {
-      return this.authSrv.generateToken({email: data.email});
+      const result = await this.userSrv.validate(data);
+      if(result?.status && result.status === 'SUCCESS') {
+        response.cookie('token', result.token, {httpOnly: true});
+        output.status = 'SUCCESS';
+        output.data = result.data;
+        return output;
+      }
     } catch(e) {
-      throw e.message;
+      console.error(e);
     }
+    output.message = 'Invalid credential !'
+    return output;
   }
 }
