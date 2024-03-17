@@ -3,4 +3,4 @@ docker compose up
 
 it will bootup Postgres, Adminer (DB viewer) and api.
 
-We can access it http://localhost:3000/
+We can access it http://localhost:3000/ [http://{hostname}:3000/]
