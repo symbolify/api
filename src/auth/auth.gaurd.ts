@@ -9,6 +9,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException,
       async canActivate(context: ExecutionContext): Promise<boolean> {
         try {
           const request = context.switchToHttp().getRequest();
+          console.log('****** => ', request);
           const { authorization }: any = request.headers;
           if (!authorization || authorization.trim() === '') {
             throw new UnauthorizedException('Please provide token');
@@ -18,7 +19,6 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException,
           request.decodedData = resp;
           return true;
         } catch (error) {
-          console.log(error);
           console.log('auth error - ', error.message);
           throw new ForbiddenException(error.message || 'session expired! Please sign In');
         }

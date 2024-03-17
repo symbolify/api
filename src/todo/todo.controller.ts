@@ -20,7 +20,7 @@ export class TodoController {
     return response;
   }
 
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Post()
   async addItem(@Body() body: any) {
     const response = {
@@ -35,8 +35,8 @@ export class TodoController {
     return response;
   }
 
-  @UseGuards(AuthGuard)
-  @Put()
+  //@UseGuards(AuthGuard)
+  @Post('update')
   async updateItem(@Body() body: {id: number, content: string}) {
     const response = {
       status: 'FAILED',
@@ -50,8 +50,8 @@ export class TodoController {
     return response;
   }
 
-  @UseGuards(AuthGuard)
-  @Delete()
+  // @UseGuards(AuthGuard)
+  @Post('delete')
   async deleteItem(@Body() body: {id: number}) {
     const response = {
       status: 'FAILED',

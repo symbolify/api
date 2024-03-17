@@ -22,7 +22,7 @@ export class UserController {
     try {
       const result = await this.userSrv.validate(data);
       if(result?.status && result.status === 'SUCCESS') {
-        response.cookie('token', result.token);
+        response.cookie('token', result.token, {httpOnly: true});
         return {
           status: 'SUCCESS',
           data: result.data
