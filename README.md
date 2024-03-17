@@ -1,4 +1,6 @@
+## to run docker compose 
+docker compose up
 
-Setup:
-npm i -g @nestjs/cli
-nest new api
+it will bootup Postgres, Adminer (DB viewer) and api.
+
+We can access it http://localhost:3000/
