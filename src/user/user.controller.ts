@@ -19,17 +19,21 @@ export class UserController {
 
   @Post('login')
   async login(@Body() data: {email: string, password: string}, @Res({ passthrough: true }) response: Response) {
+    const output: {status: string, message?: string, data?: any} = {
+      status: 'FAILED'
+    };
     try {
       const result = await this.userSrv.validate(data);
       if(result?.status && result.status === 'SUCCESS') {
         response.cookie('token', result.token, {httpOnly: true});
-        return {
-          status: 'SUCCESS',
-          data: result.data
-        };
+        output.status = 'SUCCESS';
+        output.data = result.data;
+        return output;
       }
     } catch(e) {
-      throw new UnauthorizedException();
+      console.error(e);
     }
+    output.message = 'Invalid credential !'
+    return output;
   }
 }
